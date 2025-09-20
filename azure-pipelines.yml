@@ -20,11 +20,7 @@ steps:
       cliProjectName: 'My Application'
       cliSources: '.'
 
-  # 3. Build step (example: Maven build)
-  - script: |
-      echo "Building on self-hosted agent (sast)..."
-      mvn clean install -DskipTests
-    displayName: 'Build project'
+  
 
   # 4. Run SonarQube Analysis
   - task: SonarQubeAnalyze@5
