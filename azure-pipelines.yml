@@ -2,7 +2,7 @@ trigger:
   - main   # or your branch
 
 pool:
-  name: 'sast'         # your custom pool
+  name: 'localhost'         # your custom pool
   demands:
     - agent.name -equals Default   # your agent name
 
