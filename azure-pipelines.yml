@@ -1,3 +1,4 @@
+# Trigger pipeline on pushes to main branch
 trigger:
 - main
 
@@ -15,13 +16,21 @@ steps:
 # 2️⃣ Prepare SonarQube Analysis
 - task: SonarQubePrepare@5
   inputs:
-    SonarQube: 'Sonarqube'      # your Azure DevOps SonarQube service connection
+    SonarQube: 'Sonarqube'          # your Azure DevOps SonarQube service connection
     scannerMode: 'CLI'
     configMode: 'manual'
-    cliProjectKey: 'my-python-app'    # unique key in SonarQube
-    cliProjectName: 'My Python App'   # readable name in SonarQube
-    cliSources: '.'                   # analyze all files in repo
+    cliProjectKey: 'my-python-app'  # unique key in SonarQube
+    cliProjectName: 'My Python App' # readable name in SonarQube
+    cliSources: '.'                 # analyze all files in repo
   displayName: "Prepare SonarQube Analysis"
+
+# 2.1️⃣ Remove sonar.branch.name for Community Edition (Linux/Bash)
+- script: |
+    echo "Original SONARQUBE_SCANNER_PARAMS: $SONARQUBE_SCANNER_PARAMS"
+    # Remove sonar.branch.name property
+    export SONARQUBE_SCANNER_PARAMS=$(echo "$SONARQUBE_SCANNER_PARAMS" | sed 's/sonar.branch.name=[^ ]*//g')
+    echo "Updated SONARQUBE_SCANNER_PARAMS: $SONARQUBE_SCANNER_PARAMS"
+  displayName: "Remove branch name from SonarQube parameters"
 
 # 3️⃣ Run SonarQube Analysis
 - task: SonarQubeAnalyze@5
@@ -31,4 +40,4 @@ steps:
 - task: SonarQubePublish@5
   inputs:
     pollingTimeoutSec: '300'  # wait up to 5 minutes for results
-  displayName: "Publish SonarQube Quality Gate Results"
+    displayName: "Publish SonarQube Quality Gate Results"
