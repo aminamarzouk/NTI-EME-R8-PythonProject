@@ -1,5 +1,3 @@
-trigger:
-  - main   # or your branch
 
 pool:
   name: 'sast'         # your custom pool
