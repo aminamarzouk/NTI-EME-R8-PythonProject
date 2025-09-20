@@ -2,9 +2,9 @@ trigger:
   - main   # or your branch
 
 pool:
-  name: 'localhost'         # your custom pool
+  name: 'sast'         # your custom pool
   demands:
-    - agent.name -equals Default   # your agent name
+    - agent.name -equals sast   # your agent name
 
 steps:
   # 1. Checkout code
