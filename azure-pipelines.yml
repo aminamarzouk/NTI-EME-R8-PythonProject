@@ -1,31 +1,34 @@
+trigger:
+- main
 
+# Use your self-hosted agent pool
 pool:
-  name: 'sast'         # your custom pool
+  name: 'sast'                 # your custom pool name
   demands:
-    - agent.name -equals sast   # your agent name
+    - agent.name -equals sast   # ensure it runs on your specific agent
 
 steps:
-  # 1. Checkout code
-  - checkout: self
+# 1️⃣ Checkout code
+- checkout: self
+  displayName: "Checkout Repository"
 
-  # 2. Prepare SonarQube Analysis
-  - task: SonarQubePrepare@5
-    inputs:
-      SonarQube: 'Sonarqube'   # the service connection you created
-      scannerMode: 'CLI'
-      configMode: 'manual'
-      cliProjectKey: 'my-app'
-      cliProjectName: 'My Application'
-      cliSources: '.'
+# 2️⃣ Prepare SonarQube Analysis
+- task: SonarQubePrepare@5
+  inputs:
+    SonarQube: 'Sonarqube'      # your Azure DevOps SonarQube service connection
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'my-python-app'    # unique key in SonarQube
+    cliProjectName: 'My Python App'   # readable name in SonarQube
+    cliSources: '.'                   # analyze all files in repo
+  displayName: "Prepare SonarQube Analysis"
 
-  
+# 3️⃣ Run SonarQube Analysis
+- task: SonarQubeAnalyze@5
+  displayName: "Run SonarQube Analysis"
 
-  # 4. Run SonarQube Analysis
-  - task: SonarQubeAnalyze@5
-    displayName: 'Run SonarQube analysis'
-
-  # 5. Publish Quality Gate result
-  - task: SonarQubePublish@5
-    inputs:
-      pollingTimeoutSec: '300'
-    displayName: 'Publish SonarQube Quality Gate results'
+# 4️⃣ Publish Quality Gate Results
+- task: SonarQubePublish@5
+  inputs:
+    pollingTimeoutSec: '300'  # wait up to 5 minutes for results
+  displayName: "Publish SonarQube Quality Gate Results"
