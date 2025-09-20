@@ -39,5 +39,6 @@ steps:
 # 4️⃣ Publish Quality Gate Results
 - task: SonarQubePublish@5
   inputs:
-    pollingTimeoutSec: '300'  # wait up to 5 minutes for results
-    displayName: "Publish SonarQube Quality Gate Results"
+    pollingTimeoutSec: '300'  # wait up to 5 minutes
+  displayName: "Publish SonarQube Quality Gate Results"
+
