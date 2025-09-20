@@ -4,7 +4,7 @@ trigger:
 pool:
   name: 'sast'         # your custom pool
   demands:
-    - agent.name -equals sast   # your agent name
+    - agent.name -equals Default   # your agent name
 
 steps:
   # 1. Checkout code
